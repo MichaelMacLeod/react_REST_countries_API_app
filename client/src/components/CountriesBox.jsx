@@ -1,5 +1,5 @@
 var React = require('react');
-
+var CountriesSelect = require('./CountriesSelect.jsx');
 var CountriesBox = React.createClass({
 
   getInitialState:function(){
@@ -23,6 +23,7 @@ var CountriesBox = React.createClass({
     return(
       <div>
         <h4> Countries Box </h4>
+        <CountriesSelect countries={this.state.countries}></CountriesSelect>
       </div>
       )
   }
