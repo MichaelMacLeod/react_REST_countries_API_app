@@ -7,10 +7,14 @@ var CountryDisplay = React.createClass({
         <div>
         <h2> { this.props.country.name } </h2>
           <h3>Capital city: { this.props.country.capital } </h3>
-          <h4>Population {this.props.country.population} </h4>
+          <h4>Population: {this.props.country.population} </h4>
+          <h4>Bordering countries: {this.props.country.borders} </h4>
         </div>
         )
   }
 })
 
 module.exports = CountryDisplay;
+
+
+
