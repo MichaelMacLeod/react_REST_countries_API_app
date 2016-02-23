@@ -11,7 +11,10 @@ var CountriesSelect = React.createClass({
     console.log('e', e.target);
     var newIndex = e.target.value;
     this.setState({selectedIndex: newIndex});
+    var currentCountry = this.props.countries[newIndex];
+    this.props.onSelectCountry( currentCountry );
   },
+  //Above is the crux of the One Way Flow. Whenever we want something to change, the master hands out what's needed. 
 
   render: function(){
 
