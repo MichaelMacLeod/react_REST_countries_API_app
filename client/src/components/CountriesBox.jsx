@@ -1,6 +1,7 @@
 var React = require('react');
 var CountriesSelect = require('./CountriesSelect.jsx');
 var CountryDisplay = require('./CountryDisplay.jsx');
+var BorderingCountries = require('./BorderingCountries.jsx')
 var CountriesBox = React.createClass({
 
   getInitialState:function(){

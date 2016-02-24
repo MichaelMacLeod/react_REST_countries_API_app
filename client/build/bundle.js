@@ -19659,16 +19659,23 @@
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var React = __webpack_require__(1);
-
+	var CountriesSelect = __webpack_require__(160);
+	var CountryDisplay = __webpack_require__(161);
 	var CountriesBox = React.createClass({
-	  displayName: "CountriesBox",
+	  displayName: 'CountriesBox',
 
 
 	  getInitialState: function getInitialState() {
 	    return { countries: [], currentCountry: null };
+	  },
+
+	  //We want the STATE of the CountriesBox (the master component) to change with the current country. This is a function that takes in the current country.
+	  //We can give this button to the CountriesSelect function. We'll pass it down as a property. So down at render, I'll give this a name of onSelectCountry and add this: onSelectCountry={this.setCurrentCountry}
+	  setCurrentCountry: function setCurrentCountry(country) {
+	    this.setState({ currentCountry: country });
 	  },
 
 	  //Now get info from API by making a request to the REST server:
@@ -19679,25 +19686,138 @@
 	    request.open("GET", url);
 	    request.onload = function () {
 	      var data = JSON.parse(request.responseText);
-	      this.setState({ countries: data });
+	      this.setState({ countries: data, currentCountry: data[0] });
 	    }.bind(this);
 	    request.send(null);
 	  },
 
 	  render: function render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "h4",
+	        'h4',
 	        null,
-	        " Countries Box "
-	      )
+	        ' Countries Box '
+	      ),
+	      React.createElement(CountriesSelect, { onSelectCountry: this.setCurrentCountry, countries: this.state.countries }),
+	      React.createElement(CountryDisplay, { country: this.state.currentCountry })
 	    );
 	  }
 	});
 
 	module.exports = CountriesBox;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+	var CountriesSelect = React.createClass({
+	  displayName: 'CountriesSelect',
+
+
+	  getInitialState: function getInitialState() {
+	    return { selectedIndex: null };
+	  },
+
+	  //Get the value from the event and set it as the new state:
+	  handleChange: function handleChange(e) {
+	    e.preventDefault();
+	    console.log('e', e.target);
+	    var newIndex = e.target.value;
+	    this.setState({ selectedIndex: newIndex });
+	    var currentCountry = this.props.countries[newIndex];
+	    this.props.onSelectCountry(currentCountry);
+	  },
+	  //Above is the crux of the One Way Flow. Whenever we want something to change, the master hands out what's needed.
+
+	  render: function render() {
+
+	    //BELOW, we are creating an array of equal size to the existing REST Countries API. But we're also going through the countries and creating an option element for each one, putting them in an array and putting them inside the select tag:
+
+	    var options = this.props.countries.map(function (country, index) {
+	      return React.createElement(
+	        'option',
+	        { value: index, key: index },
+	        ' ',
+	        country.name,
+	        ' '
+	      );
+	    });
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'select',
+	        { value: this.state.selectedIndex, onChange: this.handleChange },
+	        options
+	      )
+	    );
+	  }
+	});
+
+	module.exports = CountriesSelect;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var CountryDisplay = React.createClass({
+	  displayName: 'CountryDisplay',
+
+
+	  render: function render() {
+	    if (!this.props.country) {
+	      return React.createElement(
+	        'h4',
+	        null,
+	        ' No country selected '
+	      );
+	    }
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        ' ',
+	        this.props.country.name,
+	        ' '
+	      ),
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Capital city: ',
+	        this.props.country.capital,
+	        ' '
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Population: ',
+	        this.props.country.population,
+	        ' '
+	      ),
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Bordering countries: ',
+	        this.props.country.borders,
+	        ' '
+	      )
+	    );
+	  }
+	});
+
+	module.exports = CountryDisplay;
 
 /***/ }
 /******/ ]);

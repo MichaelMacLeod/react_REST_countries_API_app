@@ -2,9 +2,6 @@ var React = require('react');
 
 var CountryDisplay = React.createClass({
 
-// borderingCountries: function(){
-//   var bordering = this.props.country.borders.filter();
-// },
 
   render: function(){
     if(!this.props.country){ return <h4> No country selected </h4> }
@@ -20,6 +17,12 @@ var CountryDisplay = React.createClass({
 })
 
 module.exports = CountryDisplay;
+
+
+
+
+
+
 
 
 
