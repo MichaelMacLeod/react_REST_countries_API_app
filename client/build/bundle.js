@@ -19664,6 +19664,7 @@
 	var React = __webpack_require__(1);
 	var CountriesSelect = __webpack_require__(160);
 	var CountryDisplay = __webpack_require__(161);
+
 	var CountriesBox = React.createClass({
 	  displayName: 'CountriesBox',
 
@@ -19701,7 +19702,7 @@
 	        ' Countries Box '
 	      ),
 	      React.createElement(CountriesSelect, { onSelectCountry: this.setCurrentCountry, countries: this.state.countries }),
-	      React.createElement(CountryDisplay, { country: this.state.currentCountry })
+	      React.createElement(CountryDisplay, { country: this.state.currentCountry, countries: this.state.countries })
 	    );
 	  }
 	});
@@ -19769,55 +19770,138 @@
 	'use strict';
 
 	var React = __webpack_require__(1);
+	var BorderingCountries = __webpack_require__(162);
 
 	var CountryDisplay = React.createClass({
 	  displayName: 'CountryDisplay',
 
 
+	  findBordering: function findBordering() {
+
+	    var bordering = this.props.countries.filter(function (country) {
+	      return this.props.country.borders.includes(country.alpha3Code);
+	    }.bind(this));
+	    return bordering;
+	  },
+
 	  render: function render() {
-	    if (!this.props.country) {
+	    if (this.props.country) {
 	      return React.createElement(
-	        'h4',
+	        'div',
 	        null,
-	        ' No country selected '
+	        React.createElement(
+	          'h2',
+	          null,
+	          ' ',
+	          this.props.country.name,
+	          ' '
+	        ),
+	        React.createElement(
+	          'h3',
+	          null,
+	          'Capital city: ',
+	          this.props.country.capital,
+	          ' '
+	        ),
+	        React.createElement(
+	          'h4',
+	          null,
+	          'Population: ',
+	          Number(this.props.country.population).toLocaleString(),
+	          ' '
+	        ),
+	        React.createElement(
+	          BorderingCountries,
+	          { borderers: this.findBordering(), updateCurrentCountry: this.props.updateCurrentCountry },
+	          ' '
+	        )
 	      );
-	    }
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
+	    } else {
+	      return React.createElement(
 	        'h2',
 	        null,
-	        ' ',
-	        this.props.country.name,
-	        ' '
-	      ),
-	      React.createElement(
-	        'h3',
-	        null,
-	        'Capital city: ',
-	        this.props.country.capital,
-	        ' '
-	      ),
-	      React.createElement(
-	        'h4',
-	        null,
-	        'Population: ',
-	        this.props.country.population,
-	        ' '
-	      ),
-	      React.createElement(
-	        'h4',
-	        null,
-	        'Bordering countries: ',
-	        this.props.country.borders,
-	        ' '
-	      )
-	    );
+	        'Please select country'
+	      );
+	    }
 	  }
 	});
 
 	module.exports = CountryDisplay;
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(1);
+
+	var BorderingCountries = React.createClass({
+	  displayName: 'BorderingCountries',
+
+	  countriesElement: function countriesElement(country, index) {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        country.name
+	      ),
+	      React.createElement(
+	        'button',
+	        { value: country.alpha3Code, onClick: this.handleButton },
+	        'More country info'
+	      )
+	    );
+	  },
+
+	  handleButton: function handleButton(e) {
+	    var newCountry = e.target.value;
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	      for (var _iterator = this.props.borderers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var country = _step.value;
+
+	        if (country.alpha3Code == newCountry) {
+	          this.props.updateCurrentCountry(country);
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	  },
+
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Bordering Countries'
+	      ),
+	      this.props.borderers.map(this.countriesElement)
+	    );
+	  }
+
+	});
+
+	module.exports = BorderingCountries;
 
 /***/ }
 /******/ ]);

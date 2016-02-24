@@ -5,7 +5,7 @@ var BorderingCountries = React.createClass({
     return (
       <div>
         <h3>{country.name}</h3>
-        <button value={country.alpha3Code} onClicl={this.handleButton} >More country info</button>
+        <button value={country.alpha3Code} onClick={this.handleButton} >More country info</button>
       </div>
       )
   }, 
